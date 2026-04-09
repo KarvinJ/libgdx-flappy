@@ -5,16 +5,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import knight.nameless.screens.GameScreen;
 
-public class Android extends Game {
-
-    public static Android INSTANCE;
+public class Flappy extends Game {
+    public static Flappy INSTANCE;
     public OrthographicCamera camera;
     public FitViewport viewport;
     public final int screenWidth = 480;
     public final int screenHeight = 640;
     public boolean isGameOver;
 
-    public Android() {
+    public Flappy() {
 
         INSTANCE = this;
     }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import knight.nameless.Android;
+import knight.nameless.Flappy;
 
 public class Player extends GameObject {
 
@@ -50,11 +50,11 @@ public class Player extends GameObject {
         if (Gdx.input.justTouched()) {
 
             actionSound.play();
-            gravity = 10000 * deltaTime;
+            gravity = 20000 * deltaTime;
         }
 
         if (actualBounds.y > 700)
-            Android.INSTANCE.isGameOver = true;
+            Flappy.INSTANCE.isGameOver = true;
     }
 
     public void hasCollide(GameObject collisionObject){
@@ -62,7 +62,7 @@ public class Player extends GameObject {
         if (actualBounds.overlaps(collisionObject.actualBounds)) {
 
             collisionObject.actionSound.play();
-            Android.INSTANCE.isGameOver = true;
+            Flappy.INSTANCE.isGameOver = true;
         }
     }
 }

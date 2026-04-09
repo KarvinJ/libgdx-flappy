@@ -14,14 +14,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import knight.nameless.Android;
+import knight.nameless.Flappy;
 import knight.nameless.helpers.GameDataHelper;
-import knight.nameless.objects.*;
+import knight.nameless.objects.Floor;
+import knight.nameless.objects.Pipe;
+import knight.nameless.objects.Player;
+
 import java.util.Iterator;
 
 public class GameScreen extends ScreenAdapter {
 
-    private final Android game;
+    private final Flappy game;
     private final OrthographicCamera camera;
     public SpriteBatch batch;
     private final Texture background;
@@ -41,7 +44,7 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen() {
 
-        game = Android.INSTANCE;
+        game = Flappy.INSTANCE;
 
         game.isGameOver = false;
 
