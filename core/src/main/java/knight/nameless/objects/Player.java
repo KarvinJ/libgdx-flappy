@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player extends GameObject {
 
-    private Vector2 initialPosition;
+    private final Vector2 initialPosition;
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
     private float gravity = 0;
