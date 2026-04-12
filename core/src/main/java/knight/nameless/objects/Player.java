@@ -7,19 +7,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import knight.nameless.Flappy;
 
 public class Player extends GameObject {
 
+    private Vector2 initialPosition;
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
     private float gravity = 0;
 
-    public Player(Vector2 position) {
+    public Player(float positionX, float positionY) {
         super(
-            new Rectangle(position.x, position.y, 50, 40),
+            new Rectangle(positionX, positionY, 50, 40),
             "yellowbird-midflap.png", "wing.wav"
         );
+
+        initialPosition = new Vector2(positionX, positionY);
 
         TextureRegion region = new TextureAtlas("images/birds.atlas").findRegion("yellow-bird");
 
@@ -52,17 +54,22 @@ public class Player extends GameObject {
             actionSound.play();
             gravity = 20000 * deltaTime;
         }
-
-        if (actualBounds.y > 700)
-            Flappy.INSTANCE.isGameOver = true;
     }
 
-    public void hasCollide(GameObject collisionObject){
+    public void resetPlayerState() {
+
+        actualBounds.setPosition(initialPosition);
+        gravity = 0;
+    }
+
+    public boolean hasCollide(GameObject collisionObject){
 
         if (actualBounds.overlaps(collisionObject.actualBounds)) {
 
             collisionObject.actionSound.play();
-            Flappy.INSTANCE.isGameOver = true;
+            return true;
         }
+
+        return false;
     }
 }
