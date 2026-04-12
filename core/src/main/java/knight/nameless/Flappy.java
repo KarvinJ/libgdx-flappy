@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -29,9 +29,11 @@ public class Flappy extends ApplicationAdapter {
     public final int SCREEN_HEIGHT = 640;
     public boolean isGameOver;
     public SpriteBatch batch;
+    public ShapeRenderer shapeRenderer;
     private Texture background;
     private Player player;
     private Array<Pipe> pipes;
+    private Texture testPipe;
     private Array<Floor> floors;
     private Floor backFloor;
     private TextureAtlas numbersAtlas;
@@ -47,11 +49,14 @@ public class Flappy extends ApplicationAdapter {
     public void create() {
 
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
 
         player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
 
         pipes = new Array<>();
         floors = new Array<>();
+
+        testPipe = new Texture("images/pipe-green.png");
 
         floors.add(
             new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80)),
@@ -88,14 +93,16 @@ public class Flappy extends ApplicationAdapter {
 
     private void generatePipes() {
 
-        float upPipePosition = MathUtils.random(320, SCREEN_HEIGHT - 140);
+        var pipeSpriteHeight = 320;
 
-        Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, 320), true);
+        float upPipePosition = MathUtils.random(SCREEN_HEIGHT, SCREEN_HEIGHT + 180);
 
-        // gap size = 120.
-        float downPipePosition = upPipePosition - upPipe.actualBounds.height - 100;
+        Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, -pipeSpriteHeight));
 
-        Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, 320), false);
+        // gap size = 100.
+        float downPipePosition = upPipePosition - (pipeSpriteHeight * 2) - 100;
+
+        Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, pipeSpriteHeight));
 
         pipes.add(upPipe, downPipe);
 
@@ -222,6 +229,13 @@ public class Flappy extends ApplicationAdapter {
             batch.draw(startGame, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         batch.end();
+
+        shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+//        shapeRenderer.rect(200, 400, 64, -320);
+
+        shapeRenderer.end();
     }
 
     @Override
@@ -234,6 +248,7 @@ public class Flappy extends ApplicationAdapter {
         scoreNumbers.getTexture().dispose();
         scoreNumbersUnits.getTexture().dispose();
 
+        backFloor.dispose();
         for (Floor floor : floors)
             floor.dispose();
     }

@@ -6,8 +6,8 @@ public class Pipe extends GameObject {
 
     public boolean isBehind;
 
-    public Pipe(Rectangle bounds, boolean isRotated) {
-        super(bounds, isRotated ? "pipe-green-180.png" : "pipe-green.png", "die.wav");
+    public Pipe(Rectangle bounds) {
+        super(bounds, "pipe-green.png", "die.wav");
     }
 
     public void update(float deltaTime) {
