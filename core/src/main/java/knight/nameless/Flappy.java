@@ -33,6 +33,7 @@ public class Flappy extends ApplicationAdapter {
     private Player player;
     private Array<Pipe> pipes;
     private Array<Floor> floors;
+    private Floor backFloor;
     private TextureAtlas numbersAtlas;
     private TextureRegion scoreNumbers;
     private TextureRegion scoreNumbersUnits;
@@ -56,6 +57,8 @@ public class Flappy extends ApplicationAdapter {
             new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80)),
             new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80))
         );
+
+        backFloor = new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80));
 
         background = new Texture("images/background-day.png");
         startGame = new Texture("images/message.png");
@@ -198,6 +201,8 @@ public class Flappy extends ApplicationAdapter {
 
         for (Pipe pipe : pipes)
             pipe.draw(batch);
+
+        backFloor.draw(batch);
 
         for (Floor floor : floors)
             floor.draw(batch);
