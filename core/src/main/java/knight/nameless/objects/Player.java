@@ -14,6 +14,8 @@ public class Player extends GameObject {
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
     private float gravity = 0;
+    private final float impulse = 25000;
+    private final float gravityIncrement = -400;
 
     public Player(float positionX, float positionY) {
         super(
@@ -47,12 +49,12 @@ public class Player extends GameObject {
         actualRegion = flappingAnimation.getKeyFrame(animationTimer, true);
 
         actualBounds.y += gravity * deltaTime;
-        gravity += -400 * deltaTime;
+        gravity += gravityIncrement * deltaTime;
 
         if (Gdx.input.justTouched()) {
 
             actionSound.play();
-            gravity = 20000 * deltaTime;
+            gravity = impulse * deltaTime;
         }
     }
 
