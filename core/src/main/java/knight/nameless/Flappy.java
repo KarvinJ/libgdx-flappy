@@ -32,9 +32,8 @@ public class Flappy extends ApplicationAdapter {
     private Texture background;
     private Player player;
     private Array<Pipe> pipes;
-    private Floor floor;
-    private Floor floor2;
-    private Floor floor3;
+    private Array<Floor> floors;
+    private Floor backFloor;
     private TextureAtlas numbersAtlas;
     private TextureRegion scoreNumbers;
     private TextureRegion scoreNumbersUnits;
@@ -52,10 +51,14 @@ public class Flappy extends ApplicationAdapter {
         player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
 
         pipes = new Array<>();
+        floors = new Array<>();
 
-        floor = new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80));
-        floor2 = new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80));
-        floor3 = new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80));
+        floors.add(
+            new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80)),
+            new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80))
+        );
+
+        backFloor = new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80));
 
         background = new Texture("images/background-day.png");
         startGame = new Texture("images/message.png");
@@ -141,13 +144,16 @@ public class Flappy extends ApplicationAdapter {
             }
         }
 
-        floor.update(deltaTime);
-        floor2.update(deltaTime);
+        for (Floor floor : floors) {
 
-        var hasCollideWithAnyFloor = player.hasCollide(floor) || player.hasCollide(floor2);
+            floor.update(deltaTime);
 
-        if (hasCollideWithAnyFloor)
-            isGameOver = true;
+            if (player.hasCollide(floor)) {
+
+                isGameOver = true;
+                break;
+            }
+        }
 
         if (score < 10)
             scoreNumbers = numbersAtlas.findRegion(String.valueOf(score));
@@ -196,9 +202,10 @@ public class Flappy extends ApplicationAdapter {
         for (Pipe pipe : pipes)
             pipe.draw(batch);
 
-        floor3.draw(batch);
-        floor.draw(batch);
-        floor2.draw(batch);
+        backFloor.draw(batch);
+
+        for (Floor floor : floors)
+            floor.draw(batch);
 
         player.draw(batch);
 
