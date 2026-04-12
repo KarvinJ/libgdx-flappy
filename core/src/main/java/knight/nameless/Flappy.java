@@ -85,12 +85,12 @@ public class Flappy extends ApplicationAdapter {
 
     private void generatePipes() {
 
-        float upPipePosition = MathUtils.random(320, SCREEN_HEIGHT - 120);
+        float upPipePosition = MathUtils.random(320, SCREEN_HEIGHT - 140);
 
         Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, 320), true);
 
         // gap size = 120.
-        float downPipePosition = upPipePosition - upPipe.actualBounds.height - 120;
+        float downPipePosition = upPipePosition - upPipe.actualBounds.height - 100;
 
         Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, 320), false);
 
