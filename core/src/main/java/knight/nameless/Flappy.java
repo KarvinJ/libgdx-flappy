@@ -248,7 +248,7 @@ public class Flappy extends ApplicationAdapter {
             );
         }
 
-        playerSprite.draw(batch);
+//        playerSprite.draw(batch);
 
         if (isGameOver)
             batch.draw(startGame, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT);
