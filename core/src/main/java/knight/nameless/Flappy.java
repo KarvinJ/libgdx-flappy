@@ -4,12 +4,14 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -41,28 +43,21 @@ public class Flappy extends ApplicationAdapter {
     private TextureRegion scoreNumbersUnits;
     private Rectangle scoreBounds;
     private Texture startGame;
+    private Texture playerTexture;
+    private Texture pipeTexture;
+    private Texture floorTexture;
     private int score;
     private long lastPipeSpawnTime;
     private Sound pointSound;
     private Sound dieSound;
     private Sound flapSound;
-    private boolean isDebugMode = true;
+    private boolean isDebugMode;
 
     @Override
     public void create() {
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
-        pipes = new Array<>();
-        floors = new Array<>();
-
-        floors.add(
-            new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80)),
-            new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80))
-        );
-
-        backFloor = new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80));
 
         background = new Texture("images/background-day.png");
         startGame = new Texture("images/message.png");
@@ -80,7 +75,21 @@ public class Flappy extends ApplicationAdapter {
         dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/die.wav"));
         flapSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wing.wav"));
 
-        player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, flapSound);
+        playerTexture = new Texture("images/yellowbird-midflap.png");
+        pipeTexture = new Texture("images/pipe-green.png");
+        floorTexture = new Texture("images/base.png");
+
+        player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, flapSound, playerTexture);
+
+        pipes = new Array<>();
+        floors = new Array<>();
+
+        floors.add(
+            new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80), floorTexture),
+            new Floor(new Rectangle(SCREEN_WIDTH, 0, SCREEN_WIDTH, 80), floorTexture)
+        );
+
+        backFloor = new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80), floorTexture);
 
         camera = new OrthographicCamera();
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
@@ -100,12 +109,12 @@ public class Flappy extends ApplicationAdapter {
 
         float upPipePosition = MathUtils.random(SCREEN_HEIGHT, SCREEN_HEIGHT + 180);
 
-        Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, -pipeSpriteHeight));
+        Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, -pipeSpriteHeight), pipeTexture);
 
         // gap size = 100.
         float downPipePosition = upPipePosition - (pipeSpriteHeight * 2) - 100;
 
-        Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, pipeSpriteHeight));
+        Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, pipeSpriteHeight), pipeTexture);
 
         pipes.add(upPipe, downPipe);
 
@@ -148,11 +157,8 @@ public class Flappy extends ApplicationAdapter {
                 }
             }
 
-            if (pipe.actualBounds.x < -64) {
-
+            if (pipe.actualBounds.x < -64)
                 pipesIterator.remove();
-                pipe.dispose();
-            }
         }
 
         for (Floor floor : floors) {
@@ -265,7 +271,6 @@ public class Flappy extends ApplicationAdapter {
     @Override
     public void dispose() {
 
-        player.dispose();
         background.dispose();
         batch.dispose();
         shapeRenderer.dispose();
@@ -273,15 +278,11 @@ public class Flappy extends ApplicationAdapter {
         scoreNumbers.getTexture().dispose();
         scoreNumbersUnits.getTexture().dispose();
 
-        backFloor.dispose();
         dieSound.dispose();
         pointSound.dispose();
         flapSound.dispose();
-
-        for (Floor floor : floors)
-            floor.dispose();
-
-        for (Pipe pipe : pipes)
-            pipe.dispose();
+        pipeTexture.dispose();
+        floorTexture.dispose();
+        playerTexture.dispose();
     }
 }

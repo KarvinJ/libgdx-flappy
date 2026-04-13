@@ -1,13 +1,14 @@
 package knight.nameless.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Pipe extends GameObject {
 
     public boolean isBehind;
 
-    public Pipe(Rectangle bounds) {
-        super(bounds, "pipe-green.png");
+    public Pipe(Rectangle bounds, Texture texture) {
+        super(bounds, texture);
     }
 
     public void update(float deltaTime) {

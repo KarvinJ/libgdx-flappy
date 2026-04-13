@@ -11,9 +11,9 @@ public abstract class GameObject {
     public final Rectangle actualBounds;
     protected TextureRegion actualRegion;
 
-    protected GameObject(Rectangle bounds, String spritePath) {
+    protected GameObject(Rectangle bounds, Texture texture) {
         actualBounds = bounds;
-        actualRegion = new TextureRegion(new Texture("images/" + spritePath));
+        actualRegion = new TextureRegion(texture);
     }
 
     public void draw(Batch batch) {
@@ -24,9 +24,5 @@ public abstract class GameObject {
     public void draw(ShapeRenderer shapeRenderer) {
 
         shapeRenderer.rect(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
-    }
-
-    public void dispose() {
-        actualRegion.getTexture().dispose();
     }
 }

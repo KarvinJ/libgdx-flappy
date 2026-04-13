@@ -2,6 +2,7 @@ package knight.nameless.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,14 +16,12 @@ public class Player extends GameObject {
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
     private float gravity = 0;
-    private final float impulse = 25000;
-    private final float gravityIncrement = -400;
     private final Sound actionSound;
 
-    public Player(float positionX, float positionY, Sound sound) {
+    public Player(float positionX, float positionY, Sound sound, Texture texture) {
         super(
             new Rectangle(positionX, positionY, 50, 40),
-            "yellowbird-midflap.png"
+            texture
         );
 
         actionSound = sound;
@@ -53,11 +52,15 @@ public class Player extends GameObject {
         actualRegion = flappingAnimation.getKeyFrame(animationTimer, true);
 
         actualBounds.y += gravity * deltaTime;
+
+        float gravityIncrement = -400;
         gravity += gravityIncrement * deltaTime;
 
         if (Gdx.input.justTouched()) {
 
             actionSound.play();
+
+            float impulse = 25000;
             gravity = impulse * deltaTime;
         }
     }
