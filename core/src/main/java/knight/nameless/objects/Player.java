@@ -20,7 +20,7 @@ public class Player extends GameObject {
 
     public Player(float positionX, float positionY, Sound sound, Texture texture) {
         super(
-            new Rectangle(positionX, positionY, 50, 40),
+            new Rectangle(positionX, positionY, texture.getWidth(), texture.getHeight()),
             texture
         );
 

@@ -7,7 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -44,6 +44,7 @@ public class Flappy extends ApplicationAdapter {
     private Rectangle scoreBounds;
     private Texture startGame;
     private Texture playerTexture;
+    private Sprite playerSprite;
     private Texture pipeTexture;
     private Texture floorTexture;
     private int score;
@@ -76,6 +77,11 @@ public class Flappy extends ApplicationAdapter {
         flapSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wing.wav"));
 
         playerTexture = new Texture("images/yellowbird-midflap.png");
+
+        playerSprite = new Sprite(playerTexture);
+        playerSprite.setPosition(200, 200);
+        playerSprite.rotate(45);
+
         pipeTexture = new Texture("images/pipe-green.png");
         floorTexture = new Texture("images/base.png");
 
@@ -111,8 +117,8 @@ public class Flappy extends ApplicationAdapter {
 
         Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, -pipeSpriteHeight), pipeTexture);
 
-        // gap size = 100.
-        float downPipePosition = upPipePosition - (pipeSpriteHeight * 2) - 100;
+        // gap size = 80.
+        float downPipePosition = upPipePosition - (pipeSpriteHeight * 2) - 80;
 
         Pipe downPipe = new Pipe(new Rectangle(SCREEN_WIDTH, downPipePosition, 64, pipeSpriteHeight), pipeTexture);
 
@@ -241,6 +247,8 @@ public class Flappy extends ApplicationAdapter {
                 scoreBounds.y, scoreBounds.width, scoreBounds.height
             );
         }
+
+        playerSprite.draw(batch);
 
         if (isGameOver)
             batch.draw(startGame, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT);
