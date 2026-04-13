@@ -41,13 +41,17 @@ public class Flappy extends ApplicationAdapter {
     private TextureAtlas numbersAtlas;
     private TextureRegion scoreNumbers;
     private TextureRegion scoreNumbersUnits;
+    private TextureRegion highScoreNumbers;
+    private TextureRegion highScoreNumbersUnits;
     private Rectangle scoreBounds;
+    private Rectangle highScoreBounds;
     private Texture startGame;
     private Texture playerTexture;
     private Sprite playerSprite;
     private Texture pipeTexture;
     private Texture floorTexture;
     private int score;
+    private int highScore;
     private long lastPipeSpawnTime;
     private Sound pointSound;
     private Sound dieSound;
@@ -68,8 +72,15 @@ public class Flappy extends ApplicationAdapter {
         scoreNumbers = numbersAtlas.findRegion(String.valueOf(score));
         scoreNumbersUnits = numbersAtlas.findRegion(String.valueOf(score));
 
+        highScoreNumbers = numbersAtlas.findRegion(String.valueOf(score));
+        highScoreNumbersUnits = numbersAtlas.findRegion(String.valueOf(score));
+
         scoreBounds = new Rectangle(
-            SCREEN_WIDTH / 2f, 500, scoreNumbers.getRegionWidth(), scoreNumbers.getRegionHeight()
+            SCREEN_WIDTH / 2f, SCREEN_HEIGHT - 50, scoreNumbers.getRegionWidth(), scoreNumbers.getRegionHeight()
+        );
+
+        highScoreBounds = new Rectangle(
+            100, SCREEN_HEIGHT - 50, highScoreNumbers.getRegionWidth(), highScoreNumbers.getRegionHeight()
         );
 
         pointSound = Gdx.audio.newSound(Gdx.files.internal("sounds/point.wav"));
@@ -97,6 +108,8 @@ public class Flappy extends ApplicationAdapter {
 
         backFloor = new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80), floorTexture);
 
+        highScore = GameDataHelper.loadHighScore();
+
         camera = new OrthographicCamera();
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
 
@@ -113,7 +126,7 @@ public class Flappy extends ApplicationAdapter {
 
         var pipeSpriteHeight = 320;
 
-        float upPipePosition = MathUtils.random(SCREEN_HEIGHT, SCREEN_HEIGHT + 180);
+        float upPipePosition = MathUtils.random(SCREEN_HEIGHT, SCREEN_HEIGHT + 160);
 
         Pipe upPipe = new Pipe(new Rectangle(SCREEN_WIDTH, upPipePosition, 64, -pipeSpriteHeight), pipeTexture);
 
@@ -186,6 +199,14 @@ public class Flappy extends ApplicationAdapter {
             scoreNumbers = numbersAtlas.findRegion(String.valueOf(Integer.parseInt(("" + score).substring(0, 1))));
             scoreNumbersUnits = numbersAtlas.findRegion(String.valueOf(Integer.parseInt(("" + score).substring(1, 2))));
         }
+
+        if (highScore < 10)
+            highScoreNumbers = numbersAtlas.findRegion(String.valueOf(highScore));
+        else {
+
+            highScoreNumbers = numbersAtlas.findRegion(String.valueOf(Integer.parseInt(("" + highScore).substring(0, 1))));
+            highScoreNumbersUnits = numbersAtlas.findRegion(String.valueOf(Integer.parseInt(("" + highScore).substring(1, 2))));
+        }
     }
 
     @Override
@@ -201,6 +222,10 @@ public class Flappy extends ApplicationAdapter {
         else if (Gdx.input.isTouched()) {
 
             GameDataHelper.saveHighScore(score);
+
+            if (score > highScore)
+                highScore = score;
+
             resetGame();
         }
 
@@ -245,6 +270,15 @@ public class Flappy extends ApplicationAdapter {
             batch.draw(
                 scoreNumbersUnits, scoreBounds.x + 25,
                 scoreBounds.y, scoreBounds.width, scoreBounds.height
+            );
+        }
+
+        batch.draw(highScoreNumbers, highScoreBounds.x, highScoreBounds.y, highScoreBounds.width, highScoreBounds.height);
+
+        if (highScore > 9) {
+            batch.draw(
+                highScoreNumbersUnits, highScoreBounds.x + 25,
+                highScoreBounds.y, highScoreBounds.width, highScoreBounds.height
             );
         }
 
