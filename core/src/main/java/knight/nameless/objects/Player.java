@@ -65,7 +65,6 @@ public class Player extends GameObject {
     }
 
     public boolean hasCollide(Rectangle collisionBounds){
-
         return actualBounds.overlaps(collisionBounds);
     }
 }

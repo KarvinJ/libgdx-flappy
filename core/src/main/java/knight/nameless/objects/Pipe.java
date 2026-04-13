@@ -1,7 +1,5 @@
 package knight.nameless.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Pipe extends GameObject {
