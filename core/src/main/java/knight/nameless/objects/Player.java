@@ -1,6 +1,7 @@
 package knight.nameless.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,12 +17,15 @@ public class Player extends GameObject {
     private float gravity = 0;
     private final float impulse = 25000;
     private final float gravityIncrement = -400;
+    private final Sound actionSound;
 
-    public Player(float positionX, float positionY) {
+    public Player(float positionX, float positionY, Sound sound) {
         super(
             new Rectangle(positionX, positionY, 50, 40),
-            "yellowbird-midflap.png", "wing.wav"
+            "yellowbird-midflap.png"
         );
+
+        actionSound = sound;
 
         initialPosition = new Vector2(positionX, positionY);
 

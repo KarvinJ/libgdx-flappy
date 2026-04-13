@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Floor extends GameObject {
 
     public Floor(Rectangle bounds) {
-        super(bounds, "base.png", "die.wav");
+        super(bounds, "base.png");
     }
 
     public void update(float deltaTime) {

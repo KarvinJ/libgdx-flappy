@@ -1,7 +1,5 @@
 package knight.nameless.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,12 +10,10 @@ public abstract class GameObject {
 
     public final Rectangle actualBounds;
     protected TextureRegion actualRegion;
-    public final Sound actionSound;
 
-    protected GameObject(Rectangle bounds, String spritePath, String soundPath) {
+    protected GameObject(Rectangle bounds, String spritePath) {
         actualBounds = bounds;
         actualRegion = new TextureRegion(new Texture("images/" + spritePath));
-        actionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/"+ soundPath));
     }
 
     public void draw(Batch batch) {
@@ -32,6 +28,5 @@ public abstract class GameObject {
 
     public void dispose() {
         actualRegion.getTexture().dispose();
-        actionSound.dispose();
     }
 }

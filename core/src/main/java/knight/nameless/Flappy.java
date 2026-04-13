@@ -44,6 +44,8 @@ public class Flappy extends ApplicationAdapter {
     private int score;
     private long lastPipeSpawnTime;
     private Sound pointSound;
+    private Sound dieSound;
+    private Sound flapSound;
     private boolean isDebugMode = true;
 
     @Override
@@ -51,8 +53,6 @@ public class Flappy extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-
-        player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f);
 
         pipes = new Array<>();
         floors = new Array<>();
@@ -77,6 +77,10 @@ public class Flappy extends ApplicationAdapter {
         );
 
         pointSound = Gdx.audio.newSound(Gdx.files.internal("sounds/point.wav"));
+        dieSound = Gdx.audio.newSound(Gdx.files.internal("sounds/die.wav"));
+        flapSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wing.wav"));
+
+        player = new Player(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, flapSound);
 
         camera = new OrthographicCamera();
         camera.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
@@ -128,7 +132,7 @@ public class Flappy extends ApplicationAdapter {
 
             if (hasCollide) {
 
-                pipe.actionSound.play();
+                dieSound.play();
                 isGameOver = true;
                 break;
             }
@@ -157,7 +161,7 @@ public class Flappy extends ApplicationAdapter {
 
             if (player.hasCollide(floor.actualBounds)) {
 
-                floor.actionSound.play();
+                dieSound.play();
                 isGameOver = true;
                 break;
             }
@@ -270,6 +274,9 @@ public class Flappy extends ApplicationAdapter {
         scoreNumbersUnits.getTexture().dispose();
 
         backFloor.dispose();
+        dieSound.dispose();
+        pointSound.dispose();
+        flapSound.dispose();
 
         for (Floor floor : floors)
             floor.dispose();

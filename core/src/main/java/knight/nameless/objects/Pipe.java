@@ -7,7 +7,7 @@ public class Pipe extends GameObject {
     public boolean isBehind;
 
     public Pipe(Rectangle bounds) {
-        super(bounds, "pipe-green.png", "die.wav");
+        super(bounds, "pipe-green.png");
     }
 
     public void update(float deltaTime) {
