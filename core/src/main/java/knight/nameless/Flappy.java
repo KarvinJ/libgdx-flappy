@@ -2,8 +2,9 @@ package knight.nameless;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Color;import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -33,7 +34,6 @@ public class Flappy extends ApplicationAdapter {
     private Texture background;
     private Player player;
     private Array<Pipe> pipes;
-    private Texture testPipe;
     private Array<Floor> floors;
     private Floor backFloor;
     private TextureAtlas numbersAtlas;
@@ -44,6 +44,7 @@ public class Flappy extends ApplicationAdapter {
     private int score;
     private long lastPipeSpawnTime;
     private Sound pointSound;
+    private boolean isDebugMode = true;
 
     @Override
     public void create() {
@@ -55,8 +56,6 @@ public class Flappy extends ApplicationAdapter {
 
         pipes = new Array<>();
         floors = new Array<>();
-
-        testPipe = new Texture("images/pipe-green.png");
 
         floors.add(
             new Floor(new Rectangle(0, 0, SCREEN_WIDTH, 80)),
@@ -125,10 +124,11 @@ public class Flappy extends ApplicationAdapter {
 
             pipe.update(deltaTime);
 
-            var hasCollide = player.hasCollide(pipe);
+            var hasCollide = player.hasCollide(pipe.getCollisionBounds());
 
             if (hasCollide) {
 
+                pipe.actionSound.play();
                 isGameOver = true;
                 break;
             }
@@ -155,8 +155,9 @@ public class Flappy extends ApplicationAdapter {
 
             floor.update(deltaTime);
 
-            if (player.hasCollide(floor)) {
+            if (player.hasCollide(floor.actualBounds)) {
 
+                floor.actionSound.play();
                 isGameOver = true;
                 break;
             }
@@ -187,7 +188,13 @@ public class Flappy extends ApplicationAdapter {
             resetGame();
         }
 
-        draw();
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.F1))
+            isDebugMode = !isDebugMode;
+
+        if (isDebugMode)
+            debugDraw();
+        else
+            draw();
     }
 
     private void resetGame() {
@@ -229,11 +236,24 @@ public class Flappy extends ApplicationAdapter {
             batch.draw(startGame, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         batch.end();
+    }
+
+    private void debugDraw() {
 
         shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-//        shapeRenderer.rect(200, 400, 64, -320);
+        shapeRenderer.setColor(Color.GREEN);
+
+        for (Pipe pipe : pipes)
+            pipe.draw(shapeRenderer);
+
+        shapeRenderer.setColor(Color.WHITE);
+
+        backFloor.draw(shapeRenderer);
+
+        shapeRenderer.setColor(Color.YELLOW);
+        player.draw(shapeRenderer);
 
         shapeRenderer.end();
     }
@@ -244,12 +264,17 @@ public class Flappy extends ApplicationAdapter {
         player.dispose();
         background.dispose();
         batch.dispose();
+        shapeRenderer.dispose();
 
         scoreNumbers.getTexture().dispose();
         scoreNumbersUnits.getTexture().dispose();
 
         backFloor.dispose();
+
         for (Floor floor : floors)
             floor.dispose();
+
+        for (Pipe pipe : pipes)
+            pipe.dispose();
     }
 }

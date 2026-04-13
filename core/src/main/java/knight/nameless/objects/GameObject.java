@@ -5,13 +5,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 public abstract class GameObject {
 
     public final Rectangle actualBounds;
     protected TextureRegion actualRegion;
-    protected final Sound actionSound;
+    public final Sound actionSound;
 
     protected GameObject(Rectangle bounds, String spritePath, String soundPath) {
         actualBounds = bounds;
@@ -22,6 +23,11 @@ public abstract class GameObject {
     public void draw(Batch batch) {
 
         batch.draw(actualRegion, actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
+    }
+
+    public void draw(ShapeRenderer shapeRenderer) {
+
+        shapeRenderer.rect(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
     }
 
     public void dispose() {

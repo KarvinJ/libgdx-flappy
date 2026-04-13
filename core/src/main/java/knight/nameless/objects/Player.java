@@ -64,14 +64,8 @@ public class Player extends GameObject {
         gravity = 0;
     }
 
-    public boolean hasCollide(GameObject collisionObject){
+    public boolean hasCollide(Rectangle collisionBounds){
 
-        if (actualBounds.overlaps(collisionObject.actualBounds)) {
-
-            collisionObject.actionSound.play();
-            return true;
-        }
-
-        return false;
+        return actualBounds.overlaps(collisionBounds);
     }
 }
