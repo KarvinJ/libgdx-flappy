@@ -147,7 +147,7 @@ public class Flappy extends ApplicationAdapter {
         if (player.actualBounds.y > 700)
             isGameOver = true;
 
-        if (TimeUtils.nanoTime() - lastPipeSpawnTime > 2000000000)
+        if (TimeUtils.nanoTime() - lastPipeSpawnTime > 1600000000)
             generatePipes();
 
         for (Iterator<Pipe> pipesIterator = pipes.iterator(); pipesIterator.hasNext(); ) {

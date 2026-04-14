@@ -17,6 +17,7 @@ public class Player extends GameObject {
     private final Animation<TextureRegion> flappingAnimation;
     private float gravity = 0;
     private final Sound actionSound;
+    private float startGameTimer;
 
     public Player(float positionX, float positionY, Sound sound, Texture texture) {
         super(
@@ -51,6 +52,11 @@ public class Player extends GameObject {
 
         actualRegion = flappingAnimation.getKeyFrame(animationTimer, true);
 
+        startGameTimer += deltaTime;
+
+        if (startGameTimer < 0.5)
+            return;
+
         actualBounds.y += gravity * deltaTime;
 
         float gravityIncrement = -400;
@@ -69,6 +75,7 @@ public class Player extends GameObject {
 
         actualBounds.setPosition(initialPosition);
         gravity = 0;
+        startGameTimer = 0;
     }
 
     public boolean hasCollide(Rectangle collisionBounds){
