@@ -3,15 +3,14 @@ package knight.nameless.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Player extends GameObject {
 
+    private Sprite sprite;
     private final Vector2 initialPosition;
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
@@ -25,23 +24,25 @@ public class Player extends GameObject {
             texture
         );
 
-        actionSound = sound;
-
         initialPosition = new Vector2(positionX, positionY);
+        actionSound = sound;
 
         TextureRegion region = new TextureAtlas("images/birds.atlas").findRegion("yellow-bird");
 
-        int regionWidth = region.getRegionWidth() / 3;
+        sprite = new Sprite(region);
+        sprite.setPosition(positionX, positionY);
 
-        flappingAnimation = makeAnimationByRegion(region, regionWidth, region.getRegionHeight());
+        flappingAnimation = makeAnimationByRegion(region, 3);
     }
 
-    private Animation<TextureRegion> makeAnimationByRegion(TextureRegion region, int regionWidth, int regionHeight) {
+    private Animation<TextureRegion> makeAnimationByRegion(TextureRegion region, int totalFrames) {
+
+        int regionWidth = region.getRegionWidth() / totalFrames;
 
         Array<TextureRegion> animationFrames = new Array<>();
 
-        for (int i = 0; i < 3; i++)
-            animationFrames.add(new TextureRegion(region, i * regionWidth, 0, regionWidth, regionHeight));
+        for (int i = 0; i < totalFrames; i++)
+            animationFrames.add(new TextureRegion(region, i * regionWidth, 0, regionWidth, region.getRegionHeight()));
 
         return new Animation<>(0.1f, animationFrames);
     }
@@ -69,6 +70,15 @@ public class Player extends GameObject {
             float impulse = 25000;
             gravity = impulse * deltaTime;
         }
+    }
+
+    //need to check collision when drawing this way, but now I know how to handle the rotation with animation.
+    public void drawV2(SpriteBatch batch) {
+
+        sprite.setRegion(actualRegion);
+        sprite.setBounds(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
+        sprite.setRotation(45);
+        sprite.draw(batch);
     }
 
     public void resetPlayerState() {

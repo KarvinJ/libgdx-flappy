@@ -47,7 +47,6 @@ public class Flappy extends ApplicationAdapter {
     private Rectangle highScoreBounds;
     private Texture startGame;
     private Texture playerTexture;
-    private Sprite playerSprite;
     private Texture pipeTexture;
     private Texture floorTexture;
     private int score;
@@ -88,10 +87,6 @@ public class Flappy extends ApplicationAdapter {
         flapSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wing.wav"));
 
         playerTexture = new Texture("images/yellowbird-midflap.png");
-
-        playerSprite = new Sprite(playerTexture);
-        playerSprite.setPosition(200, 200);
-        playerSprite.rotate(45);
 
         pipeTexture = new Texture("images/pipe-green.png");
         floorTexture = new Texture("images/base.png");
@@ -262,7 +257,8 @@ public class Flappy extends ApplicationAdapter {
         for (Floor floor : floors)
             floor.draw(batch);
 
-        player.draw(batch);
+//        player.draw(batch);
+        player.drawV2(batch);
 
         batch.draw(scoreNumbers, scoreBounds.x, scoreBounds.y, scoreBounds.width, scoreBounds.height);
 
@@ -281,8 +277,6 @@ public class Flappy extends ApplicationAdapter {
                 highScoreBounds.y, highScoreBounds.width, highScoreBounds.height
             );
         }
-
-//        playerSprite.draw(batch);
 
         if (isGameOver)
             batch.draw(startGame, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT);
