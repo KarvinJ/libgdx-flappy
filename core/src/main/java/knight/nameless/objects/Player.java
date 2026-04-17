@@ -64,14 +64,17 @@ public class Player extends GameObject {
 
         handleRotation(deltaTime);
 
-        gravity -= 5 * deltaTime;
-        actualBounds.y += gravity;
+// I need to update the gravity by deltaTime
+        gravity += -500 * deltaTime;
+
+// and also apply the gravity with deltaTime
+        actualBounds.y += gravity * deltaTime;
 
         if (Gdx.input.justTouched()) {
 
             actionSound.play();
 
-            gravity = 200 * deltaTime;
+            gravity = 200;
             shouldRotateUp = true;
             upRotationTimer = 1;
             downRotationTimer = 0;
