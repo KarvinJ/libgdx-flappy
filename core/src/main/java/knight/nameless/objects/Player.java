@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player extends GameObject {
 
-    private Sprite sprite;
+    private final Sprite sprite;
     private final Vector2 initialPosition;
     private float animationTimer;
     private final Animation<TextureRegion> flappingAnimation;
@@ -64,18 +64,14 @@ public class Player extends GameObject {
 
         handleRotation(deltaTime);
 
-        actualBounds.y += gravity * deltaTime;
-
-        float gravityIncrement = -400;
-        gravity += gravityIncrement * deltaTime;
+        gravity += -5 * deltaTime;
+        actualBounds.y += gravity;
 
         if (Gdx.input.justTouched()) {
 
             actionSound.play();
 
-            float impulse = 25000;
-            gravity = impulse * deltaTime;
-
+            gravity = 200 * deltaTime;
             shouldRotateUp = true;
             upRotationTimer = 1;
             downRotationTimer = 0;
