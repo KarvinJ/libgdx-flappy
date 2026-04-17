@@ -88,7 +88,7 @@ public class Player extends GameObject {
         sprite.setRegion(actualRegion);
         sprite.setBounds(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
 
-        //set origin fix the rotation and now the rotation is in sync with the sprite position. 
+        //set origin fix the rotation and now the rotation is in sync with the sprite position.
         sprite.setOrigin(0, 0);
         sprite.setRotation(initialAngle);
         sprite.draw(batch);
@@ -110,7 +110,7 @@ public class Player extends GameObject {
             downRotationTimer += deltaTime;
 
             if (downRotationTimer > 0.5f && initialAngle >= -90)
-                initialAngle -= 1;
+                initialAngle -= 100 * deltaTime;
         }
     }
 
