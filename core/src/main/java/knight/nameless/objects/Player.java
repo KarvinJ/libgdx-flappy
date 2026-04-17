@@ -17,6 +17,10 @@ public class Player extends GameObject {
     private float gravity = 0;
     private final Sound actionSound;
     private float startGameTimer;
+    boolean shouldRotateUp;
+    float downRotationTimer = 0;
+    float upRotationTimer = 0;
+    float initialAngle = 0;
 
     public Player(float positionX, float positionY, Sound sound, Texture texture) {
         super(
@@ -58,6 +62,8 @@ public class Player extends GameObject {
         if (startGameTimer < 0.5)
             return;
 
+        handleRotation(deltaTime);
+
         actualBounds.y += gravity * deltaTime;
 
         float gravityIncrement = -400;
@@ -69,16 +75,43 @@ public class Player extends GameObject {
 
             float impulse = 25000;
             gravity = impulse * deltaTime;
+
+            shouldRotateUp = true;
+            upRotationTimer = 1;
+            downRotationTimer = 0;
+            initialAngle = 20;
         }
     }
 
-    //need to check collision when drawing this way, but now I know how to handle the rotation with animation.
-    public void drawV2(SpriteBatch batch) {
+    public void drawWithRotation(SpriteBatch batch) {
 
         sprite.setRegion(actualRegion);
         sprite.setBounds(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
-        sprite.setRotation(45);
+
+        //set origin fix the rotation and now the rotation is in sync with the sprite position. 
+        sprite.setOrigin(0, 0);
+        sprite.setRotation(initialAngle);
         sprite.draw(batch);
+    }
+
+    private void handleRotation(float deltaTime) {
+
+        if (startGameTimer > 0.5) {
+
+            if (shouldRotateUp) {
+
+                if (upRotationTimer > 0)
+                    upRotationTimer -= deltaTime;
+
+                if (upRotationTimer <= 0)
+                    shouldRotateUp = false;
+            }
+
+            downRotationTimer += deltaTime;
+
+            if (downRotationTimer > 0.5f && initialAngle >= -90)
+                initialAngle -= 1;
+        }
     }
 
     public void resetPlayerState() {
@@ -86,9 +119,13 @@ public class Player extends GameObject {
         actualBounds.setPosition(initialPosition);
         gravity = 0;
         startGameTimer = 0;
+        shouldRotateUp = false;
+        upRotationTimer = 0;
+        downRotationTimer = 0;
+        initialAngle = 0;
     }
 
-    public boolean hasCollide(Rectangle collisionBounds){
+    public boolean hasCollide(Rectangle collisionBounds) {
         return actualBounds.overlaps(collisionBounds);
     }
 }
