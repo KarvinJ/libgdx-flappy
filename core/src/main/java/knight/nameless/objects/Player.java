@@ -64,7 +64,7 @@ public class Player extends GameObject {
 
         handleRotation(deltaTime);
 
-        gravity += -5 * deltaTime;
+        gravity -= 5 * deltaTime;
         actualBounds.y += gravity;
 
         if (Gdx.input.justTouched()) {
