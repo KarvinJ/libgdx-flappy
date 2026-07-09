@@ -34,7 +34,6 @@ public class Player extends GameObject {
         TextureRegion region = new TextureAtlas("images/birds.atlas").findRegion("yellow-bird");
 
         sprite = new Sprite(region);
-        sprite.setPosition(positionX, positionY);
 
         flappingAnimation = makeAnimationByRegion(region, 3);
     }
@@ -82,7 +81,7 @@ public class Player extends GameObject {
         }
     }
 
-    public void drawWithRotation(SpriteBatch batch) {
+    public void draw(SpriteBatch batch) {
 
         sprite.setRegion(actualRegion);
         sprite.setBounds(actualBounds.x, actualBounds.y, actualBounds.width, actualBounds.height);
