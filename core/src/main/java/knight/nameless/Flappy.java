@@ -214,7 +214,7 @@ public class Flappy extends ApplicationAdapter {
         if (!isGameOver)
             update(deltaTime);
 
-        else if (Gdx.input.isTouched()) {
+        else if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
             GameDataHelper.saveHighScore(score);
 
@@ -224,7 +224,7 @@ public class Flappy extends ApplicationAdapter {
             resetGame();
         }
 
-        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.F1))
+        if (Gdx.app.getInput().isKeyJustPressed(Input.Keys.F1) || Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT))
             isDebugMode = !isDebugMode;
 
         if (isDebugMode)

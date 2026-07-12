@@ -1,6 +1,7 @@
 package knight.nameless.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -70,7 +71,7 @@ public class Player extends GameObject {
 // and also apply the gravity with deltaTime
         actualBounds.y += gravity * deltaTime;
 
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
             actionSound.play();
 
