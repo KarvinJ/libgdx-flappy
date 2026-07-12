@@ -135,7 +135,9 @@ public class Flappy extends ApplicationAdapter {
         lastPipeSpawnTime = TimeUtils.nanoTime();
     }
 
-    private void update(float deltaTime) {
+    private void update() {
+
+        float deltaTime = Gdx.graphics.getDeltaTime();
 
         player.update(deltaTime);
 
@@ -209,10 +211,8 @@ public class Flappy extends ApplicationAdapter {
 
         ScreenUtils.clear(0, 0, 0, 0);
 
-        float deltaTime = Gdx.graphics.getDeltaTime();
-
         if (!isGameOver)
-            update(deltaTime);
+            update();
 
         else if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
 
@@ -249,16 +249,15 @@ public class Flappy extends ApplicationAdapter {
 
         batch.draw(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+        backFloor.draw(batch);
+
         for (Pipe pipe : pipes)
             pipe.draw(batch);
-
-        backFloor.draw(batch);
 
         for (Floor floor : floors)
             floor.draw(batch);
 
-//        player.draw(batch);
-        player.drawWithRotation(batch);
+        player.draw(batch);
 
         batch.draw(scoreNumbers, scoreBounds.x, scoreBounds.y, scoreBounds.width, scoreBounds.height);
 
@@ -290,12 +289,10 @@ public class Flappy extends ApplicationAdapter {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         shapeRenderer.setColor(Color.GREEN);
-
         for (Pipe pipe : pipes)
             pipe.draw(shapeRenderer);
 
         shapeRenderer.setColor(Color.WHITE);
-
         backFloor.draw(shapeRenderer);
 
         shapeRenderer.setColor(Color.YELLOW);
